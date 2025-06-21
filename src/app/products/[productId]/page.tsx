@@ -83,7 +83,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
         <div>
           <p className="text-gray-700 mb-4">{product.description}</p>
-          <p className="text-xl font-bold text-green-600 mb-4">
+          <p className="text-xl font-bold text-sky-950 mb-4">
             ${product.price.toFixed(2)}
           </p>
           <div className="mb-4 text-gray-800">
@@ -103,6 +103,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Add to Cart
           </button>
+
           {product.reviews && product.reviews.length > 0 && (
             <div className="mt-8">
               <h3 className="text-2xl font-semibold mb-3">Customer Reviews</h3>
