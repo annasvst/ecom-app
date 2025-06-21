@@ -1,0 +1,127 @@
+import React from "react";
+
+interface ProductPageProps {
+  params: {
+    productId: string;
+  };
+}
+
+interface Product {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  brand: string;
+  warrantyInformation: string;
+  shippingInformation: string;
+  availabilityStatus: string;
+  reviews: string[];
+  thumbnail: string;
+  images: string[];
+}
+
+export default async function ProductPage({ params }: ProductPageProps) {
+  const { productId } = params;
+
+  let product: Product | null = null;
+  let error: string | null = null;
+
+  try {
+    const res = await fetch(`https://dummyjson.com/products/${productId}`);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch product: ${res.statusText}`);
+    }
+    product = await res.json();
+  } catch (err) {
+    console.error("Error fetching product:", err);
+    error = "Failed to load product details.";
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto p-4 text-red-600">
+        <h1 className="text-3xl font-bold mb-4">Error</h1>
+        <p>{error}</p>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-4">Loading Product...</h1>
+        <p>Product data is not available.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-4">{product.title}</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          {product.images && product.images.length > 0 && (
+            <img
+              src={product.images[0]}
+              alt={product.title}
+              className="w-full h-auto object-cover rounded-lg shadow-md"
+            />
+          )}
+          <div className="flex space-x-2 mt-4 overflow-x-auto">
+            {product.images &&
+              product.images
+                .slice(1)
+                .map((image, index) => (
+                  <img
+                    key={index}
+                    src={image}
+                    alt={`${product.title} ${index + 2}`}
+                    className="w-24 h-24 object-cover rounded-md cursor-pointer"
+                  />
+                ))}
+          </div>
+        </div>
+        <div>
+          <p className="text-gray-700 mb-4">{product.description}</p>
+          <p className="text-xl font-bold text-green-600 mb-4">
+            ${product.price.toFixed(2)}
+          </p>
+          <div className="mb-4 text-gray-800">
+            <p>
+              <strong>Brand:</strong> {product.brand}
+            </p>
+            <p>
+              <strong>Availability:</strong> {product.availabilityStatus}
+            </p>
+            <p>
+              <strong>Shipping:</strong> {product.shippingInformation}
+            </p>
+            <p>
+              <strong>Warranty:</strong> {product.warrantyInformation}
+            </p>
+          </div>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Add to Cart
+          </button>
+          {product.reviews && product.reviews.length > 0 && (
+            <div className="mt-8">
+              <h3 className="text-2xl font-semibold mb-3">Customer Reviews</h3>
+              {product.reviews.map((review: any, index: number) => (
+                <div key={index} className="border-t pt-4 mt-4">
+                  <p>
+                    <strong>Rating:</strong> {review.rating} / 5
+                  </p>
+                  <p className="text-gray-700 italic">"{review.comment}"</p>
+                  <p className="text-sm text-gray-500">
+                    - {review.reviewerName} (
+                    {new Date(review.date).toLocaleDateString()})
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
