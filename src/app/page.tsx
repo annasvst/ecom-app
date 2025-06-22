@@ -15,7 +15,7 @@ export default async function Home() {
     const data = await res.json();
     console.log(data);
     return (
-      <main className="bg-sky-950 py-4">
+      <main className="bg-sky-950 py-4 pb-20">
         <h1 className="text-amber-400 text-4xl font-bold text-center">
           All Products
         </h1>

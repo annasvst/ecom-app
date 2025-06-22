@@ -1,11 +1,79 @@
+"use client";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useCart } from "@/context/CartContext";
 
+export default function CartPage() {
+  const {
+    cart,
+    getTotalItems,
+    getTotalPrice,
+    removeFromCart,
+    increaseQuantity,
+    decreaseQuantity,
+  } = useCart();
 
-export default function Cart() {
+  if (cart.length === 0) {
     return (
-      <div>
-        <h1>My shopping cart</h1>
-
+      <div className="container min-h-screen mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-4">Your cart is empty</h1>
+        <p className="text-gray-600">
+          Add some products to your cart to get started!
+        </p>
       </div>
     );
   }
+
+  return (
+    <div className="container mx-auto p-8 min-h-screen">
+      <h1 className="text-3xl font-bold mb-6">Your Cart</h1>
+      <ul>
+        {cart.map((item) => (
+          <li key={item.id} className="flex items-center mb-4 border-b pb-4">
+            <img
+              src={item.thumbnail}
+              alt={item.name}
+              className="w-20 h-20 object-cover rounded mr-4"
+            />
+            <div className="flex-1">
+              <h2 className="text-xl font-semibold">{item.name}</h2>
+              <p>Price: ${item.price}</p>
+              <div className='flex justify-between items-center'>
+              <div className="flex items-center mt-2">
+                <button
+                  onClick={() => decreaseQuantity(item.id)}
+                  className="px-2 py-1 bg-gray-200 rounded"
+                >
+                  -
+                </button>
+                <span className="mx-2">{item.quantity}</span>
+                <button
+                  onClick={() => increaseQuantity(item.id)}
+                  className="px-2 py-1 bg-gray-200 rounded"
+                >
+                  +
+                </button>
+              </div>
+              <div></div>
+              <button
+                onClick={() => removeFromCart(item.id)}
+                className="mt-2 text-red-600 underline"
+                aria-label="Remove from cart"
+              >
+                <FontAwesomeIcon icon={faTrash} size="lg" />
+              </button>
+            </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-8 text-right">
+        <p className="text-lg">Total Items: {getTotalItems()}</p>
+        <p className="text-xl font-bold">
+          Total Price: ${getTotalPrice().toFixed(2)}
+        </p>
+      </div>
+    </div>
+  );
+}
