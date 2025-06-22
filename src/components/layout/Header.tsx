@@ -1,7 +1,7 @@
 "use client";
 
 import NavbarLinks from "./NavbarLinks";
-import LogoLink from "../common/LogoLink";
+import LogoLink from "@/components/common/LogoLink";
 
 export default function Header() {
   return (

@@ -1,4 +1,5 @@
 import React from "react";
+import CartContext from "@/context/CartContext";
 
 interface ProductPageProps {
   params: {
@@ -16,7 +17,6 @@ interface Product {
   shippingInformation: string;
   availabilityStatus: string;
   reviews: string[];
-  thumbnail: string;
   images: string[];
 }
 
@@ -100,6 +100,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <strong>Warranty:</strong> {product.warrantyInformation}
             </p>
           </div>
+
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Add to Cart
           </button>

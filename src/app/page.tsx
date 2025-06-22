@@ -4,7 +4,7 @@ import Link from "next/link";
 
 interface Product {
   id: number;
-  images: string[];
+  thumbnail: string;
   title: string;
   price: number;
 }
@@ -27,7 +27,7 @@ export default async function Home() {
                 className="rounded-lg border-2 border-white flex flex-col h-full"
               >
                 <Image
-                  src={product.images[0]}
+                  src={product.thumbnail}
                   alt={product.title}
                   width={300}
                   height={300}
