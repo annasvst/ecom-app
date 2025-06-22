@@ -3,6 +3,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useCart } from "@/context/CartContext";
+import Image from "next/image";
 
 export default function CartPage() {
   const {
@@ -31,39 +32,41 @@ export default function CartPage() {
       <ul>
         {cart.map((item) => (
           <li key={item.id} className="flex items-center mb-4 border-b pb-4">
-            <img
+            <Image
               src={item.thumbnail}
               alt={item.name}
+              width={80}
+              height={80}
               className="w-20 h-20 object-cover rounded mr-4"
             />
             <div className="flex-1">
               <h2 className="text-xl font-semibold">{item.name}</h2>
               <p>Price: ${item.price}</p>
-              <div className='flex justify-between items-center'>
-              <div className="flex items-center mt-2">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center mt-2">
+                  <button
+                    onClick={() => decreaseQuantity(item.id)}
+                    className="px-2 py-1 bg-gray-200 rounded"
+                  >
+                    -
+                  </button>
+                  <span className="mx-2">{item.quantity}</span>
+                  <button
+                    onClick={() => increaseQuantity(item.id)}
+                    className="px-2 py-1 bg-gray-200 rounded"
+                  >
+                    +
+                  </button>
+                </div>
+                <div></div>
                 <button
-                  onClick={() => decreaseQuantity(item.id)}
-                  className="px-2 py-1 bg-gray-200 rounded"
+                  onClick={() => removeFromCart(item.id)}
+                  className="mt-2 text-red-600 underline"
+                  aria-label="Remove from cart"
                 >
-                  -
-                </button>
-                <span className="mx-2">{item.quantity}</span>
-                <button
-                  onClick={() => increaseQuantity(item.id)}
-                  className="px-2 py-1 bg-gray-200 rounded"
-                >
-                  +
+                  <FontAwesomeIcon icon={faTrash} size="lg" />
                 </button>
               </div>
-              <div></div>
-              <button
-                onClick={() => removeFromCart(item.id)}
-                className="mt-2 text-red-600 underline"
-                aria-label="Remove from cart"
-              >
-                <FontAwesomeIcon icon={faTrash} size="lg" />
-              </button>
-            </div>
             </div>
           </li>
         ))}
