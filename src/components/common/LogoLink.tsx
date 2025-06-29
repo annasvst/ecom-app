@@ -1,13 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 
-interface LogoLinkProps {
-  onClick?: () => void;
-}
-
-export default function LogoLink({ onClick }: LogoLinkProps) {
+export default function LogoLink() {
   return (
-    <Link href="/" onClick={onClick}>
+    <Link href="/">
       <Image
         src="/logo.jpg"
         alt="Logo"

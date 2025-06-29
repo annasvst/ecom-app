@@ -60,7 +60,7 @@ export default function ProductClient({ product }: ProductClientProps) {
               alt={product.title}
               width={500}
               height={500}
-              className="w-full h-auto object-cover rounded-lg shadow-md"
+              className="w-full bg-white h-auto object-cover rounded-lg shadow-md"
             />
           )}
           <div className="flex space-x-2 mt-4 overflow-x-auto">
@@ -80,11 +80,11 @@ export default function ProductClient({ product }: ProductClientProps) {
           </div>
         </div>
         <div>
-          <p className="text-gray-700 mb-4">{product.description}</p>
-          <p className="text-xl font-bold text-sky-950 mb-4">
+          <p className="mb-4">{product.description}</p>
+          <p className="text-xl font-bold mb-4 text-amber-400 ">
             ${product.price.toFixed(2)}
           </p>
-          <div className="mb-4 text-gray-800">
+          <div className="mb-4">
             <p>
               <strong>Brand:</strong> {product.brand}
             </p>
@@ -118,10 +118,10 @@ export default function ProductClient({ product }: ProductClientProps) {
                   <p>
                     <strong>Rating:</strong> {review.rating} / 5
                   </p>
-                  <p className="text-gray-700 italic">
+                  <p className=" italic">
                     &quot;{review.comment}&quot;
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm ">
                     - {review.reviewerName} (
                     {new Date(review.date).toLocaleDateString()})
                   </p>

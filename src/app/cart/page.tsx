@@ -37,23 +37,25 @@ export default function CartPage() {
               alt={item.name}
               width={80}
               height={80}
-              className="w-20 h-20 object-cover rounded mr-4"
+              className="w-20 bg-white h-20 object-cover rounded mr-4"
             />
             <div className="flex-1">
               <h2 className="text-xl font-semibold">{item.name}</h2>
-              <p>Price: ${item.price}</p>
+              <p className="font-semibold text-amber-400 ">
+                Price: ${item.price}
+              </p>
               <div className="flex justify-between items-center">
                 <div className="flex items-center mt-2">
                   <button
                     onClick={() => decreaseQuantity(item.id)}
-                    className="px-2 py-1 bg-gray-200 rounded"
+                    className="px-2 py-1 bg-gray-200 text-black rounded"
                   >
                     -
                   </button>
                   <span className="mx-2">{item.quantity}</span>
                   <button
                     onClick={() => increaseQuantity(item.id)}
-                    className="px-2 py-1 bg-gray-200 rounded"
+                    className="px-2 py-1 bg-gray-200 text-black rounded"
                   >
                     +
                   </button>
@@ -61,7 +63,7 @@ export default function CartPage() {
                 <div></div>
                 <button
                   onClick={() => removeFromCart(item.id)}
-                  className="mt-2 text-red-600 underline"
+                  className="mt-2 dark:text-white text-red-600 underline"
                   aria-label="Remove from cart"
                 >
                   <FontAwesomeIcon icon={faTrash} size="lg" />
@@ -73,7 +75,7 @@ export default function CartPage() {
       </ul>
       <div className="mt-8 text-right">
         <p className="text-lg">Total Items: {getTotalItems()}</p>
-        <p className="text-xl font-bold">
+        <p className="text-xl font-bold text-amber-400 ">
           Total Price: ${getTotalPrice().toFixed(2)}
         </p>
       </div>

@@ -15,8 +15,8 @@ export default async function Home() {
     const data = await res.json();
     console.log(data);
     return (
-      <main className="bg-sky-950 py-4 pb-20">
-        <h1 className="text-amber-400 text-4xl font-bold text-center">
+      <main className=" py-4 pb-20">
+        <h1 className="text-4xl font-bold text-center">
           All Products
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 mx-auto px-6 py-4 items-stretch">
@@ -24,7 +24,7 @@ export default async function Home() {
             <Link key={product.id} href={`products/${product.id}`} passHref>
               <div
                 key={product.id}
-                className="rounded-lg border-2 border-white flex flex-col h-full"
+                className="rounded border-1 bg-sky-950 flex flex-col h-full"
               >
                 <Image
                   src={product.thumbnail}
@@ -37,7 +37,7 @@ export default async function Home() {
                   <h2 className="text-lg font-bold text-white">
                     {product.title}
                   </h2>
-                  <p className="text-sm text-amber-400 mt-auto">
+                  <p className="text-sm font-semibold text-amber-400 mt-auto">
                     {product.price}
                   </p>
                 </div>
