@@ -1,5 +1,5 @@
 "use client";
-
+import { useForm } from "react-hook-form";
 import {
   allCategories,
   Product,
@@ -12,9 +12,8 @@ import {
 } from "@/types/product";
 import { useActionState } from "react";
 import { AddNewProductAction } from "@/app/actions/admin/products";
-import Form from "next/form";
 
-const initialState: NewProductFormState = {
+const initialState = {
   success: false,
   inputs: {},
   errors: {},
@@ -35,6 +34,48 @@ export default function Admin() {
     FormData
   >(AddNewProductAction, initialState);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<Partial<Product>>({
+    defaultValues: {
+      title: state?.inputs?.title ?? undefined,
+      description: state?.inputs?.description ?? undefined,
+      category: state?.inputs?.category ?? undefined,
+      price: state?.inputs?.price ?? undefined,
+      availabilityStatus: state?.inputs?.availabilityStatus ?? undefined,
+      returnPolicy: state?.inputs?.returnPolicy ?? undefined,
+      tags: state?.inputs?.tags ?? [],
+    },
+  });
+
+  const onSubmit = (data: Partial<Product>) => {
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((v) =>
+          formData.append(
+            key,
+            typeof v === "string" || typeof v === "number"
+              ? String(v)
+              : String(v)
+          )
+        );
+      } else if (value !== undefined && value !== null) {
+        if (key === "price" && typeof value === "number") {
+          formData.append(key, value.toString());
+        } else if (typeof value === "string" || typeof value === "number") {
+          formData.append(key, String(value));
+        } else {
+          formData.append(key, String(value));
+        }
+      }
+    });
+    formAction(formData);
+  };
+
   if (isPending) return <p>Loading...</p>;
 
   return (
@@ -42,7 +83,7 @@ export default function Admin() {
       <h1 className="my-12 text-2xl font-bold text-center text-sky-950">
         Add a New Product
       </h1>
-      <Form action={formAction}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col mb-4">
           <label htmlFor="title" className="font-semibold mb-2 text-sky-950">
             Product Name
@@ -50,15 +91,12 @@ export default function Admin() {
           <input
             type="text"
             id="title"
-            name="title"
+            {...register("title", { required: "Product name is required" })}
             placeholder="e.g., Timeless Chronograph Watch"
             className="bg-slate-300 text-sky-950 placeholder:italic placeholder:text-slate-400 rounded-lg border border-slate-600 px-4 py-3 focus:outline-none focus:border-slate-400 transition"
-            defaultValue={state?.inputs?.title ?? ""}
           />
-          {state?.errors?.title ? (
-            <p className="text-red-400 text-sm mt-1">{state?.errors?.title}</p>
-          ) : (
-            <></>
+          {errors.title && (
+            <p className="text-red-400 text-sm mt-1">{errors.title.message}</p>
           )}
         </div>
 
@@ -72,17 +110,16 @@ export default function Admin() {
           <input
             type="text"
             id="description"
-            name="description"
+            {...register("description", {
+              required: "Description is required",
+            })}
             placeholder="e.g., Elegant wristwatch with leather strap"
             className="bg-slate-300 text-sky-950 placeholder:italic placeholder:text-slate-400 rounded-lg border border-slate-600 px-4 py-3 focus:outline-none focus:border-slate-400 transition"
-            defaultValue={state?.inputs?.description ?? ""}
           />
-          {state?.errors?.description ? (
+          {errors.description && (
             <p className="text-red-400 text-sm mt-1">
-              {state?.errors?.description}
+              {errors.description.message}
             </p>
-          ) : (
-            <></>
           )}
         </div>
 
@@ -92,9 +129,8 @@ export default function Admin() {
           </label>
           <select
             id="category"
-            name="category"
+            {...register("category", { required: "Category is required" })}
             className="bg-slate-300 text-sky-950 rounded-lg border border-slate-600 px-4 py-3 focus:outline-none focus:border-slate-400 transition"
-            defaultValue={state?.inputs?.category ?? ""}
           >
             <option value="">Select category</option>
             {allCategories.map((category) => (
@@ -103,12 +139,10 @@ export default function Admin() {
               </option>
             ))}
           </select>
-          {state?.errors?.category ? (
+          {errors.category && (
             <p className="text-red-400 text-sm mt-1">
-              {state?.errors?.category}
+              {errors.category.message}
             </p>
-          ) : (
-            <></>
           )}
         </div>
 
@@ -119,15 +153,15 @@ export default function Admin() {
           <input
             type="number"
             id="price"
-            name="price"
+            {...register("price", {
+              required: "Price is required",
+              min: { value: 0.01, message: "Price must be positive" },
+            })}
             placeholder="e.g., 199.99"
             className="bg-slate-300 text-sky-950 placeholder:italic placeholder:text-slate-400 rounded-lg border border-slate-600 px-4 py-3 focus:outline-none focus:border-slate-400 transition"
-            defaultValue={state?.inputs?.price ?? ""}
           />
-          {state?.errors?.price ? (
-            <p className="text-red-400 text-sm mt-1">{state?.errors?.price}</p>
-          ) : (
-            <></>
+          {errors.price && (
+            <p className="text-red-400 text-sm mt-1">{errors.price.message}</p>
           )}
         </div>
 
@@ -140,11 +174,12 @@ export default function Admin() {
           </label>
           <select
             id="availabilityStatus"
-            name="availabilityStatus"
+            {...register("availabilityStatus", {
+              required: "Availability status is required",
+            })}
             className="bg-slate-300 text-sky-950 rounded-lg border border-slate-600 px-4 py-3 focus:outline-none focus:border-slate-400 transition"
-            defaultValue={state?.inputs?.availabilityStatus ?? ""}
           >
-            <option value="">select availability status</option>
+            <option value="">Select availability status</option>
             {allAvailabilityStatuses.map((statusKey) => (
               <option
                 key={statusKey}
@@ -162,12 +197,10 @@ export default function Admin() {
               </option>
             ))}
           </select>
-          {state?.errors?.availabilityStatus ? (
+          {errors.availabilityStatus && (
             <p className="text-red-400 text-sm mt-1">
-              {state?.errors?.availabilityStatus}
+              {errors.availabilityStatus.message}
             </p>
-          ) : (
-            <></>
           )}
         </div>
 
@@ -180,11 +213,12 @@ export default function Admin() {
           </label>
           <select
             id="returnPolicy"
-            name="returnPolicy"
+            {...register("returnPolicy", {
+              required: "Return policy is required",
+            })}
             className="bg-slate-300 text-sky-950 rounded-lg border border-slate-600 px-4 py-3 focus:outline-none focus:border-slate-400 transition"
-            defaultValue={state?.inputs?.returnPolicy ?? ""}
           >
-            <option value="">select return policy</option>
+            <option value="">Select return policy</option>
             {allReturnPolicies.map((policyKey) => (
               <option
                 key={policyKey}
@@ -194,12 +228,10 @@ export default function Admin() {
               </option>
             ))}
           </select>
-          {state?.errors?.returnPolicy ? (
+          {errors.returnPolicy && (
             <p className="text-red-400 text-sm mt-1">
-              {state?.errors?.returnPolicy}
+              {errors.returnPolicy.message}
             </p>
-          ) : (
-            <></>
           )}
         </div>
 
@@ -216,7 +248,7 @@ export default function Admin() {
                 <input
                   type="checkbox"
                   id={`tag-${tagKey}`}
-                  name="tags"
+                  {...register("tags")}
                   value={Tag[tagKey as keyof typeof Tag]}
                   className="mr-2 bg-slate-300 "
                 />
@@ -226,10 +258,8 @@ export default function Admin() {
               </div>
             ))}
           </div>
-          {state?.errors?.tags ? (
-            <p className="text-red-400 text-sm mt-1">{state?.errors?.tags}</p>
-          ) : (
-            <></>
+          {errors.tags && (
+            <p className="text-red-400 text-sm mt-1">{errors.tags.message}</p>
           )}
         </div>
 
@@ -239,7 +269,7 @@ export default function Admin() {
         >
           Create Product
         </button>
-      </Form>
+      </form>
     </main>
   );
 }
