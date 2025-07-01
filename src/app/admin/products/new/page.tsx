@@ -1,5 +1,5 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { FieldError, useForm } from "react-hook-form";
 import {
   allCategories,
   Product,
@@ -82,7 +82,7 @@ export default function Admin() {
   if (isPending) return <p>Loading...</p>;
 
   return (
-    <main className="max-w-2xl mx-auto my-8 p-8 rounded-2xl shadow-lg border bg-slate-200">
+    <main className="max-w-md md:max-w-2xl mx-auto my-8 p-8 rounded-2xl shadow-lg border bg-slate-50 mb-20">
       <h1 className="my-12 text-2xl font-bold text-center text-sky-950">
         Add a New Product
       </h1>
@@ -105,184 +105,66 @@ export default function Admin() {
           })}
           error={errors.description}
         />
-        <div className="flex flex-col mb-4">
-          <label htmlFor="title" className="font-semibold mb-2 text-sky-950">
-            Product Name
-          </label>
-          <input
-            type="text"
-            id="title"
-            {...register("title", { required: "Product name is required" })}
-            placeholder="e.g., Timeless Chronograph Watch"
-            className="bg-slate-300 text-sky-950 placeholder:italic placeholder:text-slate-400 rounded-lg border border-slate-600 px-4 py-3 focus:outline-none focus:border-slate-400 transition"
-          />
-          {errors.title && (
-            <p className="text-red-400 text-sm mt-1">{errors.title.message}</p>
-          )}
-        </div>
+        <SelectField
+          label="Category"
+          id="category"
+          options={allCategories.map((category) => ({
+            value: category,
+            label: category,
+          }))}
+          register={register("category", { required: "Category is required" })}
+          error={errors.category}
+        />
 
-        <div className="flex flex-col mb-4">
-          <label
-            htmlFor="description"
-            className="text-sky-950 font-semibold mb-2"
-          >
-            Description
-          </label>
-          <input
-            type="text"
-            id="description"
-            {...register("description", {
-              required: "Description is required",
-            })}
-            placeholder="e.g., Elegant wristwatch with leather strap"
-            className="bg-slate-300 text-sky-950 placeholder:italic placeholder:text-slate-400 rounded-lg border border-slate-600 px-4 py-3 focus:outline-none focus:border-slate-400 transition"
-          />
-          {errors.description && (
-            <p className="text-red-400 text-sm mt-1">
-              {errors.description.message}
-            </p>
-          )}
-        </div>
+        <InputField
+          label="Price"
+          id="price"
+          type="number"
+          placeholder="e.g., 199.99"
+          register={register("price", {
+            required: "Price is required",
+            min: { value: 0.01, message: "Price must be positive" },
+          })}
+          error={errors.price}
+        />
 
-        <div className="flex flex-col mb-4">
-          <label htmlFor="category" className="text-sky-950 font-semibold mb-2">
-            Category
-          </label>
-          <select
-            id="category"
-            {...register("category", { required: "Category is required" })}
-            className="bg-slate-300 text-sky-950 rounded-lg border border-slate-600 px-4 py-3 focus:outline-none focus:border-slate-400 transition"
-          >
-            <option value="">Select category</option>
-            {allCategories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-          {errors.category && (
-            <p className="text-red-400 text-sm mt-1">
-              {errors.category.message}
-            </p>
-          )}
-        </div>
+        <SelectField
+          label="Availability Status"
+          id="availabilityStatus"
+          options={allAvailabilityStatuses.map((statusKey) => ({
+            value:
+              AvailabilityStatus[statusKey as keyof typeof AvailabilityStatus],
+            label:
+              AvailabilityStatus[statusKey as keyof typeof AvailabilityStatus],
+          }))}
+          register={register("availabilityStatus", {
+            required: "Availability status is required",
+          })}
+          error={errors.availabilityStatus}
+        />
 
-        <div className="flex flex-col mb-4">
-          <label htmlFor="price" className="text-sky-950 font-semibold mb-2">
-            Price
-          </label>
-          <input
-            type="number"
-            id="price"
-            {...register("price", {
-              required: "Price is required",
-              min: { value: 0.01, message: "Price must be positive" },
-            })}
-            placeholder="e.g., 199.99"
-            className="bg-slate-300 text-sky-950 placeholder:italic placeholder:text-slate-400 rounded-lg border border-slate-600 px-4 py-3 focus:outline-none focus:border-slate-400 transition"
-          />
-          {errors.price && (
-            <p className="text-red-400 text-sm mt-1">{errors.price.message}</p>
-          )}
-        </div>
+        <SelectField
+          label="Return Policy"
+          id="returnPolicy"
+          options={allReturnPolicies.map((policyKey) => ({
+            value: ReturnPolicy[policyKey as keyof typeof ReturnPolicy],
+            label: ReturnPolicy[policyKey as keyof typeof ReturnPolicy],
+          }))}
+          register={register("returnPolicy", {
+            required: "Return policy is required",
+          })}
+          error={errors.returnPolicy}
+        />
 
-        <div className="flex flex-col mb-4">
-          <label
-            htmlFor="availabilityStatus"
-            className="text-sky-950 font-semibold mb-2"
-          >
-            Availability Status
-          </label>
-          <select
-            id="availabilityStatus"
-            {...register("availabilityStatus", {
-              required: "Availability status is required",
-            })}
-            className="bg-slate-300 text-sky-950 rounded-lg border border-slate-600 px-4 py-3 focus:outline-none focus:border-slate-400 transition"
-          >
-            <option value="">Select availability status</option>
-            {allAvailabilityStatuses.map((statusKey) => (
-              <option
-                key={statusKey}
-                value={
-                  AvailabilityStatus[
-                    statusKey as keyof typeof AvailabilityStatus
-                  ]
-                }
-              >
-                {
-                  AvailabilityStatus[
-                    statusKey as keyof typeof AvailabilityStatus
-                  ]
-                }
-              </option>
-            ))}
-          </select>
-          {errors.availabilityStatus && (
-            <p className="text-red-400 text-sm mt-1">
-              {errors.availabilityStatus.message}
-            </p>
-          )}
-        </div>
-
-        <div className="flex flex-col mb-4">
-          <label
-            htmlFor="returnPolicy"
-            className="text-sky-950 font-semibold mb-2"
-          >
-            Return Policy
-          </label>
-          <select
-            id="returnPolicy"
-            {...register("returnPolicy", {
-              required: "Return policy is required",
-            })}
-            className="bg-slate-300 text-sky-950 rounded-lg border border-slate-600 px-4 py-3 focus:outline-none focus:border-slate-400 transition"
-          >
-            <option value="">Select return policy</option>
-            {allReturnPolicies.map((policyKey) => (
-              <option
-                key={policyKey}
-                value={ReturnPolicy[policyKey as keyof typeof ReturnPolicy]}
-              >
-                {ReturnPolicy[policyKey as keyof typeof ReturnPolicy]}
-              </option>
-            ))}
-          </select>
-          {errors.returnPolicy && (
-            <p className="text-red-400 text-sm mt-1">
-              {errors.returnPolicy.message}
-            </p>
-          )}
-        </div>
-
-        <div className="flex flex-col mb-6">
-          <label htmlFor="tags" className="text-sky-950 font-semibold mb-2">
-            Tags
-          </label>
-          <div className="flex flex-wrap gap-3">
-            {allTags.map((tagKey) => (
-              <div
-                key={tagKey}
-                className="bg-slate-300 text-sky-950 rounded-lg border border-slate-600 px-4 py-3 focus:outline-none focus:border-slate-400 transition"
-              >
-                <input
-                  type="checkbox"
-                  id={`tag-${tagKey}`}
-                  {...register("tags")}
-                  value={Tag[tagKey as keyof typeof Tag]}
-                  className="mr-2 bg-slate-300 "
-                />
-                <label htmlFor={`tag-${tagKey}`} className="text-sky-950">
-                  {Tag[tagKey as keyof typeof Tag]}
-                </label>
-              </div>
-            ))}
-          </div>
-          {errors.tags && (
-            <p className="text-red-400 text-sm mt-1">{errors.tags.message}</p>
-          )}
-        </div>
+        <TagsCheckboxGroup
+          label="Tags"
+          tags={allTags.map((tagKey) => ({
+            value: Tag[tagKey as keyof typeof Tag],
+            label: Tag[tagKey as keyof typeof Tag],
+          }))}
+          register={register("tags")}
+          error={errors.tags as FieldError | undefined}
+        />
 
         <button
           type="submit"

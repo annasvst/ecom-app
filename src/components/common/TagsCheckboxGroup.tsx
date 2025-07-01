@@ -4,7 +4,7 @@ interface TagsCheckboxGroupProps {
   label: string;
   tags: { value: string; label: string }[];
   register: UseFormRegisterReturn;
-  error?: FieldError;
+  error?: FieldError | FieldError[] | undefined;
 }
 
 export default function TagsCheckboxGroup({
@@ -35,9 +35,16 @@ export default function TagsCheckboxGroup({
           </div>
         ))}
       </div>
-      {error && (
-        <p className="text-red-400 text-sm mt-1">{error.message}</p>
-      )}
+      {error &&
+        (Array.isArray(error)
+          ? error.find(Boolean)?.message
+          : error.message) && (
+          <p className="text-red-400 text-sm mt-1">
+            {Array.isArray(error)
+              ? error.find(Boolean)?.message
+              : error.message}
+          </p>
+        )}
     </div>
   );
 }
