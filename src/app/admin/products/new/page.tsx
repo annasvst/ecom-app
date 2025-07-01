@@ -12,6 +12,9 @@ import {
 } from "@/types/product";
 import { useActionState } from "react";
 import { AddNewProductAction } from "@/app/actions/admin/products";
+import InputField from "@/components/common/InputField";
+import SelectField from "@/components/common/SelectField";
+import TagsCheckboxGroup from "@/components/common/TagsCheckboxGroup";
 
 const initialState = {
   success: false,
@@ -84,6 +87,24 @@ export default function Admin() {
         Add a New Product
       </h1>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <InputField
+          label="Product Name"
+          id="title"
+          type="text"
+          placeholder="e.g., Timeless Chronograph Watch"
+          register={register("title", { required: "Product name is required" })}
+          error={errors.title}
+        />
+
+        <InputField
+          label="Description"
+          id="description"
+          placeholder="e.g., Elegant wristwatch with leather strap"
+          register={register("description", {
+            required: "Description is required",
+          })}
+          error={errors.description}
+        />
         <div className="flex flex-col mb-4">
           <label htmlFor="title" className="font-semibold mb-2 text-sky-950">
             Product Name
