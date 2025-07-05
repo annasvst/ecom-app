@@ -9,12 +9,14 @@ import {
   ReturnPolicy,
   allTags,
   Tag,
+  Category,
 } from "@/types/product";
 import { useActionState } from "react";
 import { AddNewProductAction } from "@/app/actions/admin/products";
 import InputField from "@/components/common/InputField";
 import SelectField from "@/components/common/SelectField";
 import TagsCheckboxGroup from "@/components/common/TagsCheckboxGroup";
+// import { QRCodeSVG } from "qrcode.react";
 
 const initialState = {
   success: false,
@@ -42,6 +44,8 @@ export default function Admin() {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
+    setValue,
   } = useForm<Partial<Product>>({
     defaultValues: {
       title: state?.inputs?.title ?? undefined,
@@ -53,6 +57,8 @@ export default function Admin() {
       tags: state?.inputs?.tags ?? [],
     },
   });
+
+  // const qrText = watch("meta.qrCode");
 
   const onSubmit = (data: Partial<Product>) => {
     const formData = new FormData();
@@ -113,7 +119,8 @@ export default function Admin() {
             value: category,
             label: category,
           }))}
-          register={register("category", { required: "Category is required" })}
+          value={watch("category") ?? ""}
+          onChange={(val) => setValue("category", val as Category)}
           error={errors.category}
         />
 
@@ -171,6 +178,7 @@ export default function Admin() {
           register={register("brand", { required: "Brand is required" })}
           error={errors.brand}
         />
+
         <InputField
           label="Weight (kg)"
           id="weight"
@@ -201,6 +209,7 @@ export default function Admin() {
             })}
             error={errors.dimensions?.height}
           />
+
           <InputField
             label="Depth (sm)"
             id="dimensions.depth"
@@ -244,9 +253,8 @@ export default function Admin() {
             label:
               AvailabilityStatus[statusKey as keyof typeof AvailabilityStatus],
           }))}
-          register={register("availabilityStatus", {
-            required: "Availability status is required",
-          })}
+          value={watch("availabilityStatus") ?? ""}
+          onChange={(val) => setValue("availabilityStatus", val as AvailabilityStatus)}
           error={errors.availabilityStatus}
         />
 
@@ -257,9 +265,8 @@ export default function Admin() {
             value: ReturnPolicy[policyKey as keyof typeof ReturnPolicy],
             label: ReturnPolicy[policyKey as keyof typeof ReturnPolicy],
           }))}
-          register={register("returnPolicy", {
-            required: "Return policy is required",
-          })}
+          value={watch("returnPolicy") ?? ""}
+          onChange={(val) => setValue("returnPolicy", val as ReturnPolicy)}
           error={errors.returnPolicy}
         />
 
@@ -274,6 +281,7 @@ export default function Admin() {
           })}
           error={errors.minimumOrderQuantity}
         />
+
         <InputField
           label="Barcode"
           id="meta.barcode"
@@ -281,13 +289,18 @@ export default function Admin() {
           register={register("meta.barcode")}
           error={errors.meta?.barcode}
         />
-        <InputField
-          label="QR Code"
-          id="meta.qrCode"
-          placeholder="Enter QR code or link"
-          register={register("meta.qrCode")}
-          error={errors.meta?.qrCode}
-        />
+
+        {/* 
+          To be adder later with firebase storage
+        
+        {product?.meta?.qrCode && (
+          <div className="my-4 text-center">
+            <p className="mb-2 font-semibold text-slate-700">
+              QR Code for product page:
+            </p>
+            <QRCodeSVG value={product.meta.qrCode} size={128} />
+          </div>
+        )} 
 
         <InputField
           label="Image 1 URL"
@@ -296,6 +309,7 @@ export default function Admin() {
           register={register("images.0")}
           error={errors.images?.[0]}
         />
+
         <InputField
           label="Image 2 URL"
           id="images.1"
@@ -303,6 +317,7 @@ export default function Admin() {
           register={register("images.1")}
           error={errors.images?.[1]}
         />
+         */}
 
         <button
           type="submit"

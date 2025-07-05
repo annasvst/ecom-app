@@ -15,6 +15,7 @@ const newProductSchema = z.object({
   availabilityStatus: z.nativeEnum(AvailabilityStatus),
   returnPolicy: z.nativeEnum(ReturnPolicy),
   tags: z.array(z.nativeEnum(Tag)).optional(),
+  
 });
 
 export async function AddNewProductAction(
