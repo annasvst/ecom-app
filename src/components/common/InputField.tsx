@@ -29,9 +29,7 @@ export default function InputField({
         {...register}
         className="bg-slate-300 text-sky-950 placeholder:italic placeholder:text-slate-400 rounded-lg border border-slate-600 px-4 py-3 focus:outline-none focus:border-slate-400 transition"
       />
-      {error && (
-        <p className="text-red-400 text-sm mt-1">{error.message}</p>
-      )}
+      {error && <p className="text-red-400 text-sm mt-1">{error.message}</p>}
     </div>
   );
 }

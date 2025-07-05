@@ -1,8 +1,8 @@
 "use client";
 import { FieldError, useForm } from "react-hook-form";
 import {
-  allCategories,
   Product,
+  allCategories,
   allAvailabilityStatuses,
   allReturnPolicies,
   AvailabilityStatus,
@@ -82,7 +82,7 @@ export default function Admin() {
   if (isPending) return <p>Loading...</p>;
 
   return (
-    <main className="max-w-md md:max-w-2xl mx-auto my-8 p-8 rounded-2xl shadow-lg border bg-slate-50 mb-20">
+    <main className="max-w-sm md:max-w-md lg:max-w-3xl mx-auto my-8 p-8 rounded-2xl shadow-lg border bg-slate-50 mb-20">
       <h1 className="my-12 text-2xl font-bold text-center text-sky-950">
         Add a New Product
       </h1>
@@ -105,6 +105,7 @@ export default function Admin() {
           })}
           error={errors.description}
         />
+
         <SelectField
           label="Category"
           id="category"
@@ -117,7 +118,7 @@ export default function Admin() {
         />
 
         <InputField
-          label="Price"
+          label="Price ($)"
           id="price"
           type="number"
           placeholder="e.g., 199.99"
@@ -126,6 +127,112 @@ export default function Admin() {
             min: { value: 0.01, message: "Price must be positive" },
           })}
           error={errors.price}
+        />
+
+        <InputField
+          label="Discount Percentage (%)"
+          id="discountPercentage"
+          type="number"
+          placeholder="e.g., 10"
+          register={register("discountPercentage", {
+            required: "Discount percentage is required",
+            min: {
+              value: 0.01,
+              message: "Discount percentage must be positive",
+            },
+          })}
+          error={errors.discountPercentage}
+        />
+
+        <InputField
+          label="Stock"
+          id="stock"
+          type="number"
+          placeholder="e.g., 100"
+          register={register("stock", { required: "Stock is required" })}
+          error={errors.stock}
+        />
+
+        <TagsCheckboxGroup
+          label="Tags"
+          tags={allTags.map((tagKey) => ({
+            value: Tag[tagKey as keyof typeof Tag],
+            label: Tag[tagKey as keyof typeof Tag],
+          }))}
+          register={register("tags")}
+          error={errors.tags as FieldError | undefined}
+        />
+
+        <InputField
+          label="Brand"
+          id="brand"
+          type="text"
+          placeholder="e.g., Rolex"
+          register={register("brand", { required: "Brand is required" })}
+          error={errors.brand}
+        />
+        <InputField
+          label="Weight (kg)"
+          id="weight"
+          type="number"
+          placeholder="e.g., 100"
+          register={register("weight", { required: "Weight is required" })}
+          error={errors.weight}
+        />
+
+        <div className="flex gap-2 flex-col lg:flex-row">
+          <InputField
+            label="Width (sm)"
+            id="dimensions.width"
+            type="number"
+            placeholder="e.g., 10"
+            register={register("dimensions.width", {
+              required: "Width is required",
+            })}
+            error={errors.dimensions?.width}
+          />
+          <InputField
+            label="Height (sm)"
+            id="dimensions.height"
+            type="number"
+            placeholder="e.g., 10"
+            register={register("dimensions.height", {
+              required: "Height is required",
+            })}
+            error={errors.dimensions?.height}
+          />
+          <InputField
+            label="Depth (sm)"
+            id="dimensions.depth"
+            type="number"
+            placeholder="e.g., 10"
+            register={register("dimensions.depth", {
+              required: "Depth is required",
+            })}
+            error={errors.dimensions?.depth}
+          />
+        </div>
+
+        <InputField
+          label="Warranty Information"
+          id="warrantyInformation"
+          type="string"
+          placeholder="e.g., 12 month/no warranty"
+          register={register("warrantyInformation", {
+            required: "Warranty Information is required",
+          })}
+          error={errors.warrantyInformation}
+        />
+
+        <InputField
+          label="Shipping Information"
+          id="shippingInformation"
+          type="string"
+          placeholder="e.g., free shipping"
+          register={register("shippingInformation", {
+            required: "Shipping Information is required",
+          })}
+          error={errors.shippingInformation}
         />
 
         <SelectField
@@ -156,14 +263,45 @@ export default function Admin() {
           error={errors.returnPolicy}
         />
 
-        <TagsCheckboxGroup
-          label="Tags"
-          tags={allTags.map((tagKey) => ({
-            value: Tag[tagKey as keyof typeof Tag],
-            label: Tag[tagKey as keyof typeof Tag],
-          }))}
-          register={register("tags")}
-          error={errors.tags as FieldError | undefined}
+        <InputField
+          label="Minimum Order Quantity"
+          id="minimumOrderQuantity"
+          type="number"
+          placeholder="e.g., 1"
+          register={register("minimumOrderQuantity", {
+            required: "Minimum order quantity is required",
+            min: 1,
+          })}
+          error={errors.minimumOrderQuantity}
+        />
+        <InputField
+          label="Barcode"
+          id="meta.barcode"
+          placeholder="Enter barcode"
+          register={register("meta.barcode")}
+          error={errors.meta?.barcode}
+        />
+        <InputField
+          label="QR Code"
+          id="meta.qrCode"
+          placeholder="Enter QR code or link"
+          register={register("meta.qrCode")}
+          error={errors.meta?.qrCode}
+        />
+
+        <InputField
+          label="Image 1 URL"
+          id="images.0"
+          placeholder="https://example.com/image1.jpg"
+          register={register("images.0")}
+          error={errors.images?.[0]}
+        />
+        <InputField
+          label="Image 2 URL"
+          id="images.1"
+          placeholder="https://example.com/image2.jpg"
+          register={register("images.1")}
+          error={errors.images?.[1]}
         />
 
         <button

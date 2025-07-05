@@ -5,7 +5,7 @@ export interface Product {
   category: Category;
   price: number;
   discountPercentage?: number;
-  rating?: number;
+  rating?: number; //no need to add to schema
   stock: number;
   tags?: Tag[];
   brand: string;
@@ -15,7 +15,7 @@ export interface Product {
   warrantyInformation: string;
   shippingInformation: string;
   availabilityStatus: AvailabilityStatus;
-  reviews?: Review[];
+  reviews?: Review[];  //no need to add to schema
   returnPolicy: ReturnPolicy;
   minimumOrderQuantity: number;
   meta: Meta;
@@ -88,3 +88,5 @@ export interface Meta {
   barcode: string;
   qrCode: string;
 }
+
+
