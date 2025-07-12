@@ -43,7 +43,6 @@ export default function Admin() {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     watch,
     setValue,
   } = useForm<Partial<Product>>({
